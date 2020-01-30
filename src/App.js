@@ -1,26 +1,58 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useState,useEffect} from 'react';
+import axios from 'axios'
 
-function App() {
+const Counter=()=> {
+  const [counter, incrementCounter] = useState(0)
+  const [todoName,setToDOname]=useState(' ')
+  const [todoList,setTodoList]=useState([])
+ 
+  useEffect(() => {
+    document.title = counter
+    //console.log(counter);
+    axios.get('https://hooks-371b5.firebaseio.com/todos.json')
+    .then(response=> {console.log(response.data);
+    })
+    axios.post('https://hooks-371b5.firebaseio.com/todos.json',todoList)
+    .then(response=> {console.log(response.data);
+    })
+
+    return()=>{
+      console.log('cleanup');
+      
+    }
+  },[todoList,counter])
+  
+  const handleIncrement=()=> {
+    incrementCounter(counter + 1);
+  }
+
+  const evetChangedHandler=(event)=>{
+    setToDOname(event.target.value)
+    
+  }
+  
+  const addListHandler=()=>{
+    setTodoList(todoList.concat(todoName))
+   // console.log(todoList)
+    
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div>{counter}</div>
+      <hr />
+      <button type="button" onClick={handleIncrement}>+</button>
+      <button type="button" onClick={handleIncrement}>-</button>
+      <hr/>
+      <input type="text" placeholder="todo" onChange={evetChangedHandler} value={todoName}></input>
+      <button onClick={addListHandler}>ADD</button>
+      <ul>
+        {
+        todoList.map((todo,key)=>{
+        return(<li key={key}>{todo}</li>)
+        })}
+      </ul>
     </div>
-  );
+  ) 
 }
-
-export default App;
+export default Counter
