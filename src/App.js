@@ -33,7 +33,7 @@ const Counter=()=> {
   
   const addListHandler=()=>{
     setTodoList(todoList.concat(todoName))
-   // console.log(todoList)
+    console.log(todoList)
     
   }
 
